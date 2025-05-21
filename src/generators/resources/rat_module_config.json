@@ -1,0 +1,62 @@
+[
+  {
+    "vessel_type":"inlet_flow",
+    "BC_type":"nn_rat",
+    "module_format":"cellml",
+    "module_file":"rat_modules.cellml",
+    "module_type":"rat_flow_interp_BC_type",
+    "entrance_ports":[],
+    "general_ports":[],
+    "exit_ports":
+    [
+        {
+           "port_type":"vessel_port",
+           "variables":["v", "P"]
+        }
+    ],
+    "variables_and_units":
+    [
+        ["v", "m3_per_s", "access", "variable"],
+        ["T", "second", "access", "global_constant"]
+    ]
+  },
+  {
+    "vessel_type":"terminal",
+    "BC_type":"pp_R1CR2_fixed_I",
+    "module_format":"cellml",
+    "module_file":"rat_modules.cellml",
+    "module_type":"pp_T_R1CR2_fixed_I_type",
+    "entrance_ports":
+    [
+      {
+        "port_type":"vessel_port",
+        "variables":["v","u_in"]
+      }
+    ],
+    "exit_ports":
+    [
+      {
+        "port_type":"vessel_port",
+        "variables":["v_T", "u_out"]
+      },
+      {
+        "port_type":"flow_port",
+        "variables":["q_T"]
+      }
+    ],
+    "general_ports":[],
+    "variables_and_units":
+    [
+      ["u", "J_per_m3", "access", "variable"],
+      ["v", "m3_per_s", "access", "variable"],
+      ["v_T", "m3_per_s", "access", "variable"],
+      ["R_1_T", "Js_per_m6", "access", "constant"],
+      ["R_2_T", "Js_per_m6", "access", "constant"],
+      ["C_T", "m6_per_J", "access", "constant"],
+      ["u_ext", "J_per_m3", "access", "constant"],
+      ["u_out", "J_per_m3", "access", "constant"],
+      ["u_in", "J_per_m3", "access", "boundary_condition"],
+      ["q_T", "m3", "access", "variable"]
+    ]
+   }
+]
