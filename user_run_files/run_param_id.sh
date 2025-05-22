@@ -4,5 +4,5 @@ if [[ $# -eq 0 ]] ; then
 fi
 source opencor_pythonshell_path.sh
 ./run_autogeneration.sh
-mpiexec -n $1 ${opencor_pythonshell_path} ../src/scripts/param_id_run_script.py
+mpiexec -n 4 ${opencor_pythonshell_path} ../src/scripts/param_id_run_script.py
 
