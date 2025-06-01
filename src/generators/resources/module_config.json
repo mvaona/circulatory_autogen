@@ -2568,7 +2568,7 @@
       ["m_tube", "dimensionless", "access", "constant"],
       ["n_tube", "dimensionless", "access", "constant"],
       ["l", "metre", "access", "constant"],
-      ["r", "metre", "access", "constant"],
+      ["r", "metre", "access", "variable"],
       ["r_us", "metre", "access", "constant"],
       ["u_ext", "J_per_m3", "access", "constant"],
       ["u_in", "J_per_m3", "access", "boundary_condition"],
@@ -7068,10 +7068,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"stiffness_port",
         "variables":["K_tube"]
       }
@@ -7080,7 +7076,6 @@
     [
       ["u", "J_per_m3", "access", "variable"],
       ["v", "m3_per_s", "access", "variable"],
-      ["E", "J_per_m3", "access", "constant"],
       ["q_C", "m3", "access", "variable"],
       ["q_total", "m3", "access", "variable"],
       ["q_us", "m3", "access", "variable"],
@@ -7133,13 +7128,9 @@
           "port_type":"radius_port",
           "variables":["r_us"]
         },
-      {
-        "port_type":"radius_us_and_s_port",
-        "variables":["r_us", "r"]
-      },
         {
-          "port_type":"elastic_mod_port",
-          "variables":["E"]
+          "port_type":"radius_us_and_s_port",
+          "variables":["r_us", "r"]
         },
         {
           "port_type":"visco_mod_port",
@@ -7350,10 +7341,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"visco_mod_port",
         "variables":["K_m"]
       },
@@ -7496,10 +7483,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"stiffness_port",
         "variables":["K_tube"]
       }
@@ -7508,7 +7491,7 @@
     [
       ["u", "J_per_m3", "access", "variable"],
       ["v", "m3_per_s", "access", "variable"],
-      ["E", "J_per_m3", "access", "constant"],
+      ["v_d", "m3_per_s", "access", "variable"],
       ["q_C", "m3", "access", "variable"],
       ["q_total", "m3", "access", "variable"],
       ["q_us", "m3", "access", "variable"],
@@ -7568,10 +7551,6 @@
       {
         "port_type":"radius_us_and_s_port",
         "variables":["r_us", "r"]
-      },
-      {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
       },
       {
         "port_type":"visco_mod_port",
@@ -7791,10 +7770,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"visco_mod_port",
         "variables":["K_m"]
       },
@@ -7963,10 +7938,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"stiffness_port",
         "variables":["K_tube"]
       }  
@@ -7976,7 +7947,6 @@
       ["u", "J_per_m3", "access", "variable"],
       ["du_dt", "J_per_m3s", "access", "variable"],
       ["v", "m3_per_s", "access", "variable"],
-      ["E", "J_per_m3", "access", "constant"],
       ["q_C", "m3", "access", "variable"],
       ["q_total", "m3", "access", "variable"],
       ["q_us", "m3", "access", "variable"],
@@ -8045,10 +8015,6 @@
       {
         "port_type":"radius_us_and_s_port",
         "variables":["r_us", "r"]
-      },
-      {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
       },
       {
         "port_type":"visco_mod_port",
@@ -8204,10 +8170,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"stiffness_port",
         "variables":["K_tube"]
       }
@@ -8217,7 +8179,6 @@
       ["u", "J_per_m3", "access", "variable"],
       ["v", "m3_per_s", "access", "variable"],
       ["u_d", "J_per_m3", "access", "variable"],
-      ["E", "J_per_m3", "access", "constant"],
       ["v_in", "m3_per_s", "access", "boundary_condition"],
       ["v_out_1", "m3_per_s", "access", "boundary_condition"],
       ["v_out_2", "m3_per_s", "access", "boundary_condition"],
@@ -8281,10 +8242,6 @@
       {
         "port_type":"radius_us_and_s_port",
         "variables":["r_us", "r"]
-      },
-      {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
       },
       {
         "port_type":"visco_mod_port",
@@ -8502,10 +8459,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"visco_mod_port",
         "variables":["K_m"]
       },
@@ -8650,10 +8603,6 @@
         "variables":["r_us", "r"]
       },
       {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
-      },
-      {
         "port_type":"stiffness_port",
         "variables":["K_tube"]
       }
@@ -8663,7 +8612,6 @@
       ["u", "J_per_m3", "access", "variable"],
       ["v", "m3_per_s", "access", "variable"],
       ["u_d", "J_per_m3", "access", "variable"],
-      ["E", "J_per_m3", "access", "constant"],
       ["v_in_1", "m3_per_s", "access", "boundary_condition"],
       ["v_in_2", "m3_per_s", "access", "boundary_condition"],
       ["v_out", "m3_per_s", "access", "boundary_condition"],
@@ -8723,10 +8671,6 @@
       {
         "port_type":"radius_us_and_s_port",
         "variables":["r_us", "r"]
-      },
-      {
-        "port_type":"elastic_mod_port",
-        "variables":["E"]
       },
       {
         "port_type":"visco_mod_port",

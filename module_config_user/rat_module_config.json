@@ -17,7 +17,8 @@
     "variables_and_units":
     [
         ["v", "m3_per_s", "access", "variable"],
-        ["T", "second", "access", "global_constant"]
+        ["T", "second", "access", "global_constant"],
+        ["P", "J_per_m3", "access", "variable"]
     ]
   },
   {
@@ -37,14 +38,16 @@
     [
       {
         "port_type":"vessel_port",
-        "variables":["v_T", "u_out"]
+        "variables":["v_T","u_out"]
       },
       {
         "port_type":"flow_port",
-        "variables":["q_T"]
+        "variables":["v_T"]
       }
     ],
-    "general_ports":[],
+    "general_ports":
+    [
+    ],
     "variables_and_units":
     [
       ["u", "J_per_m3", "access", "variable"],
@@ -54,7 +57,7 @@
       ["R_2_T", "Js_per_m6", "access", "constant"],
       ["C_T", "m6_per_J", "access", "constant"],
       ["u_ext", "J_per_m3", "access", "constant"],
-      ["u_out", "J_per_m3", "access", "constant"],
+      ["u_out", "J_per_m3", "access", "boundary_condition"],
       ["u_in", "J_per_m3", "access", "boundary_condition"],
       ["q_T", "m3", "access", "variable"]
     ]
