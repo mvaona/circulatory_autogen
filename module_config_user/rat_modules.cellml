@@ -1487,6 +1487,64 @@
             </apply>
         </math>
     </component>
+    <component name="rat_material_prop_visco_const_type">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="l" public_interface="in" units="metre"/>
+        <variable name="r_us" public_interface="in" units="metre"/>
+        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
+        <variable name="Gamma" public_interface="out" units="Js_per_m3"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Gamma</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">0.1</cn>
+                    <ci>K_m</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="h" public_interface="out" units="metre"/>
+        <variable name="K_tube_visco" public_interface="out" units="Js_per_m6"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>h</ci>
+                <apply>
+                    <times/>
+                    <ci>r_us</ci>
+                    <cn cellml:units="dimensionless">0.1</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>K_tube_visco</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <divide/>
+                            <cn cellml:units="dimensionless">2</cn>
+                            <cn cellml:units="dimensionless">3</cn>
+                        </apply>
+                        <ci>Gamma</ci>
+                        <ci>h</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>l</ci>
+                        <pi/>
+                        <apply>
+                            <power/>
+                            <ci>r_us</ci>
+                            <cn cellml:units="dimensionless">3</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
     <component name="pp_T_R1CR2_fixed_I_type">
         <variable name="t" public_interface="in" units="second"/>
         <!-- Constitutive parameters-->
@@ -3250,7 +3308,7 @@
                         <apply>
                             <minus/>
                             <ci>v</ci>
-                            <ci>v_out</ci>
+                            <ci>v_d</ci>
                         </apply>
                     </apply>
                     <ci>u_ext</ci>

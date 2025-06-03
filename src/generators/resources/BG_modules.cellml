@@ -6575,7 +6575,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-        <variable name="E" public_interface="in" units="J_per_m3"/>
         <variable name="K_m" public_interface="in" units="Js_per_m3"/>
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
@@ -9971,7 +9970,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-        <variable name="E" public_interface="in" units="J_per_m3"/>
         <variable name="K_m" public_interface="in" units="Js_per_m3"/>
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
@@ -10513,7 +10511,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-        <variable name="E" public_interface="in" units="J_per_m3"/>
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_us" public_interface="in" units="metre"/>
@@ -10734,7 +10731,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-        <variable name="E" public_interface="in" units="J_per_m3"/>
         <variable name="K_m" public_interface="in" units="Js_per_m3"/>
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
