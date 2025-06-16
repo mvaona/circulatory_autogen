@@ -42,11 +42,7 @@
       },
       {
         "port_type":"radius_port",
-        "variables":["r_us"]
-      },
-      {
-        "port_type":"visco_mod_port",
-        "variables":["K_m"]
+        "variables":["r_0"]
       },
       {
         "port_type":"visco_coeff_port",
@@ -57,8 +53,9 @@
     [
       ["K_tube_visco", "Js_per_m6", "access", "variable"],
       ["l", "metre", "access", "boundary_condition"],
-      ["r_us", "metre", "access", "boundary_condition"],
-      ["K_m", "Js_per_m3", "access", "boundary_condition"]
+      ["r_0", "metre", "access", "boundary_condition"],
+      ["SMvolfrac_art", "dimensionless", "no_access", "global_constant"],
+      ["K_m", "Js_per_m3", "access", "constant"]
     ]
   },
   {

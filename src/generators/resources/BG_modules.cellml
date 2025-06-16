@@ -6102,10 +6102,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <!-- var E: J_per_m3 {pub: in};-->
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -6323,10 +6319,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -6973,10 +6965,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -7457,10 +7445,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <!-- var E: J_per_m3 {pub: in};-->
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -7729,10 +7713,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -8288,10 +8268,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <!-- var E: J_per_m3 {pub: in};-->
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -8584,10 +8560,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -9175,10 +9147,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <!-- var E: J_per_m3 {pub: in};-->
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -9467,10 +9435,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -10055,10 +10019,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <!--var E: J_per_m3 {pub: in};-->
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -10356,10 +10316,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -11112,10 +11068,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -11634,10 +11586,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <!-- var E: J_per_m3 {pub: in};-->
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
@@ -11935,10 +11883,6 @@ u_out = 0{J_per_m3};-->
         <variable name="g" public_interface="in" units="m_per_s2"/>
         <variable name="beta_g" public_interface="in" units="dimensionless"/>
         <variable name="theta" public_interface="in" units="dimensionless"/>
-<<<<<<< HEAD
-        <variable name="K_m" public_interface="in" units="Js_per_m3"/>
-=======
->>>>>>> c4b542e326c87c43ac2dc09f430824eb560ab4e1
         <variable name="l" public_interface="in" units="metre"/>
         <variable name="r" public_interface="out" units="metre"/>
         <variable name="r_0" public_interface="in" units="metre"/>
