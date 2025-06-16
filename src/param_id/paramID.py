@@ -308,7 +308,7 @@ class CVS0DParamID():
 
 
                     if len(self.obs_info["ground_truth_series"]) > 0:
-                        if self.obs_info["dt"][series_idx] == self.dt:
+                        if self.obs_info["obs_dt"][series_idx] == self.dt:
                             min_len_series = min(self.obs_info["ground_truth_series"][series_idx].shape[0], len(best_fit_obs_series[0]))
                         else:
                             min_len_series = len(best_fit_obs_series[0])
@@ -469,10 +469,10 @@ class CVS0DParamID():
                                                             self.obs_info["std_const_vec"][const_idx]
                         elif self.obs_info["data_types"][II] == "series":
 
-                            if self.obs_info["dt"][series_idx] != self.dt:
+                            if self.obs_info["obs_dt"][series_idx] != self.dt:
                                 # interpolate the series to the dt of the ground truth series
                                 time_series = np.linspace(0, best_fit_obs_series[series_idx].shape[0]*self.dt, best_fit_obs_series[series_idx].shape[0])
-                                obs_time_series = np.linspace(0, self.obs_info["ground_truth_series"][series_idx].shape[0]*self.obs_info["dt"][series_idx],
+                                obs_time_series = np.linspace(0, self.obs_info["ground_truth_series"][series_idx].shape[0]*self.obs_info["obs_dt"][series_idx],
                                                                 self.obs_info["ground_truth_series"][series_idx].shape[0])
 
                                 series_entry = np.interp(obs_time_series, time_series, best_fit_obs_series[series_idx])
@@ -563,6 +563,10 @@ class CVS0DParamID():
                     fig_phase, axs_phase = plt.subplots(squeeze=False)
                     axs_phase = axs_phase[0,0]
                 plot_saved = False
+        
+        # save std error and percentage error
+        np.save(os.path.join(self.output_dir, 'percent_error_vec.npy'), percent_error_vec)
+        np.save(os.path.join(self.output_dir, 'std_error_vec.npy'), std_error_vec)
 
         # save final plot if it is not a full set of subplots
         if not plot_saved:
@@ -577,7 +581,6 @@ class CVS0DParamID():
             plt.close()
 
         # Make a bar plot with all percentage errors.
-        fig, axs = plt.subplots()
         obs_names_for_plot_list = []
 
         for II in range(self.obs_info["num_obs"]):
@@ -585,55 +588,64 @@ class CVS0DParamID():
             obs_names_for_plot_list.append(name_str)
         obs_names_for_plot = np.array(obs_names_for_plot_list)
 
-        bar_list = axs.bar(obs_names_for_plot, percent_error_vec, label='% error', width=1.0, color='b', edgecolor='black')
-        axs.axhline(y=0.0,linewidth= 3, color='k', linestyle= 'dotted')
+        num_plots = len(obs_names_for_plot)// 10 + 1
 
-        # bar_list[0].set_facecolor('r')
-        # bar_list[1].set_facecolor('r')
+        for plot_idx in range(num_plots):
+            fig, axs = plt.subplots()
+            if plot_idx == num_plots - 1:
+                bar_list = axs.bar(obs_names_for_plot[plot_idx*10:], percent_error_vec[plot_idx*10:], label='% error', width=1.0, color='b', edgecolor='black')
+            else:
+                bar_list = axs.bar(obs_names_for_plot[plot_idx*10:plot_idx*10+10], percent_error_vec[plot_idx*10:plot_idx*10+10], label='% error', width=1.0, color='b', edgecolor='black')
 
-        # axs.legend()
-        axs.set_ylabel(r'E$_{\%}$')
-        plt.xticks(rotation=90)
-        plt.tight_layout()
-        plt.savefig(os.path.join(self.plot_dir,
-                                 f'error_bars_{self.file_name_prefix}_'
-                                 f'{self.param_id_obs_file_prefix}.eps'))
-        plt.savefig(os.path.join(self.plot_dir,
-                                 f'error_bars_{self.file_name_prefix}_'
-                                 f'{self.param_id_obs_file_prefix}.pdf'))
-        plt.savefig(os.path.join(self.plot_dir,
-                                 f'error_bars_{self.file_name_prefix}_'
-                                 f'{self.param_id_obs_file_prefix}.png'))
-        plt.close()
+            # axs.set_ylim(ymin=0.0)
+            # axs.set_yticks(np.arange(0, 21, 10))
+            axs.axhline(y=0.0,linewidth= 3, color='k', linestyle= 'dotted')
 
-        #plot error as number of standard deviations of
-        fig, axs = plt.subplots()
-        bar_list = axs.bar(obs_names_for_plot, std_error_vec, label='% error', width=1.0, color='b', edgecolor='black')
-        axs.axhline(y=0.0,linewidth=3, color='k', linestyle= 'dotted')
+            # bar_list[0].set_facecolor('r')
+            # bar_list[1].set_facecolor('r')
 
-        # save std error and percentage error
+            # axs.legend()
+            axs.set_ylabel(r'E$_{\%}$')
+            plt.xticks(rotation=90)
+            plt.tight_layout()
+            plt.savefig(os.path.join(self.plot_dir,
+                                    f'error_bars_{self.file_name_prefix}_'
+                                    f'{self.param_id_obs_file_prefix}_{plot_idx}.eps'))
+            plt.savefig(os.path.join(self.plot_dir,
+                                    f'error_bars_{self.file_name_prefix}_'
+                                    f'{self.param_id_obs_file_prefix}_{plot_idx}.pdf'))
+            plt.savefig(os.path.join(self.plot_dir,
+                                    f'error_bars_{self.file_name_prefix}_'
+                                    f'{self.param_id_obs_file_prefix}_{plot_idx}.png'))
+            plt.close()
 
-        np.save(os.path.join(self.output_dir, 'percent_error_vec.npy'), percent_error_vec)
-        np.save(os.path.join(self.output_dir, 'std_error_vec.npy'), std_error_vec)
-        
+            #plot error as number of standard deviations of
+            fig, axs = plt.subplots()
+            if plot_idx == num_plots - 1:
+                bar_list = axs.bar(obs_names_for_plot[plot_idx*10:], std_error_vec[plot_idx*10:], label='% error', width=1.0, color='b', edgecolor='black')
+            else:
+                bar_list = axs.bar(obs_names_for_plot[plot_idx*10:plot_idx*10+10], std_error_vec[plot_idx*10:plot_idx*10+10], label='% error', width=1.0, color='b', edgecolor='black')
+            axs.axhline(y=0.0,linewidth=3, color='k', linestyle= 'dotted')
 
-        # bar_list[0].set_facecolor('r')
-        # bar_list[1].set_facecolor('r')
+            
 
-        # axs.legend()
-        axs.set_ylabel('E$_{std}$')
-        plt.xticks(rotation=90)
-        plt.tight_layout()
-        plt.savefig(os.path.join(self.plot_dir,
-                                 f'std_error_bars_{self.file_name_prefix}_'
-                                 f'{self.param_id_obs_file_prefix}.eps'))
-        plt.savefig(os.path.join(self.plot_dir,
-                                 f'std_error_bars_{self.file_name_prefix}_'
-                                 f'{self.param_id_obs_file_prefix}.pdf'))
-        plt.savefig(os.path.join(self.plot_dir,
-                                 f'std_error_bars_{self.file_name_prefix}_'
-                                 f'{self.param_id_obs_file_prefix}.png'))
-        plt.close()
+            # bar_list[0].set_facecolor('r')
+            # bar_list[1].set_facecolor('r')
+
+            # axs.legend()
+            axs.set_ylabel('E$_{std}$')
+            plt.xticks(rotation=90)
+            plt.tight_layout()
+            plt.savefig(os.path.join(self.plot_dir,
+                                    f'std_error_bars_{self.file_name_prefix}_'
+                                    f'{self.param_id_obs_file_prefix}_{plot_idx}.eps'))
+            plt.savefig(os.path.join(self.plot_dir,
+                                    f'std_error_bars_{self.file_name_prefix}_'
+                                    f'{self.param_id_obs_file_prefix}_{plot_idx}.pdf'))
+            plt.savefig(os.path.join(self.plot_dir,
+                                    f'std_error_bars_{self.file_name_prefix}_'
+                                    f'{self.param_id_obs_file_prefix}_{plot_idx}.png'))
+            plt.close()
 
         print('______observable errors______')
         for obs_idx in range(self.obs_info["num_obs"]):
@@ -1315,6 +1327,32 @@ class CVS0DParamID():
             else:
                 self.obs_info["operation_kwargs"].append({})
 
+            if self.gt_df.iloc[II]["data_type"] == "series":
+                if 'sample_rate' in self.gt_df.iloc[II].keys():
+                    print(f'WARNING sample_rate found in obs_data.json for observable {self.obs_info["obs_names"][II]}, ',
+                        'this is deprecated, please use obs_dt instead. Setting obs_dt = (1 / sample_rate)')
+                    self.gt_df.iloc[II]["obs_dt"] = 1 / self.gt_df.iloc[II]["sample_rate"]
+                if 'dt' in self.gt_df.iloc[II].keys():
+                    print(f'WARNING dt found in obs_data.json for observable {self.obs_info["obs_names"][II]}, ',
+                        'this is deprecated, please use obs_dt instead. Setting obs_dt = dt')
+                    self.gt_df.iloc[II]["obs_dt"] = self.gt_df.iloc[II]["dt"]
+            else: 
+                if 'obs_dt' in self.gt_df.iloc[II].keys():
+                    print(f'obs_dt found in obs_data.json for observable {self.obs_info["obs_names"][II]}, ',
+                            f'with data type {self.gt_df.iloc[II]['data_type']}. obs_dt should only be used for series data. Exiting')
+                    exit()
+                if 'dt' in self.gt_df.iloc[II].keys():
+                    print(f'WARNING dt found in obs_data.json for observable {self.obs_info["obs_names"][II]}, ',
+                            f'with data type {self.gt_df.iloc[II]['data_type']}. dt is deprecated for obs_dt ',
+                            'and obs_dt should only be used for series data. Exiting')
+                    exit()
+                if 'sample_rate' in self.gt_df.iloc[II].keys():
+                    print(f'WARNING sample_rate found in obs_data.json for observable {self.obs_info["obs_names"][II]}, ',
+                            f'with data type {self.gt_df.iloc[II]['data_type']}. sample_rate is deprecated for obs_dt ',
+                            'and obs_dt should only be used for series data. Exiting')
+                    exit()
+
+
         self.obs_info["num_obs"] = len(self.obs_info["obs_names"])
 
         # how much to weight the different observable errors by
@@ -1583,15 +1621,15 @@ class CVS0DParamID():
         dt_list = []
         for II in range(self.gt_df.shape[0]):
             if self.gt_df.iloc[II]["data_type"] == "series":
-                if "dt" not in self.gt_df.iloc[II].keys():
+                if "obs_dt" not in self.gt_df.iloc[II].keys():
                     print("dt not found in obs_data.json for series data, exiting")
                     exit()
-                dt_list.append(self.gt_df.iloc[II]["dt"])
+                dt_list.append(self.gt_df.iloc[II]["obs_dt"])
         
-        self.obs_info["dt"] = np.array(dt_list)
+        self.obs_info["obs_dt"] = np.array(dt_list)
         
-        if len(self.obs_info["dt"]) > 0:
-            if min(self.obs_info["dt"]) < self.dt:
+        if len(self.obs_info["obs_dt"]) > 0:
+            if min(self.obs_info["obs_dt"]) < self.dt:
                 print("one of the dt in obs_data.json is less than the dt in user_inputs.yaml, the output timestep"
                     "defined in user_inputs.yaml must be less than the smallest dt for your data. Exiting")
                 exit()
@@ -2847,10 +2885,10 @@ class OpencorParamID():
             #                                 self.obs_info["std_series_vec"].reshape(-1, 1))) / min_len_series
 
             for series_idx in range(len(series)):
-                if self.obs_info["dt"][series_idx] != self.dt:
+                if self.obs_info["obs_dt"][series_idx] != self.dt:
                     # interpolate the series to the dt of the ground truth series
                     time_series = np.linspace(0, series[series_idx].shape[0]*self.dt, series[series_idx].shape[0])
-                    obs_time_series = np.linspace(0, self.obs_info["ground_truth_series"][series_idx].shape[0]*self.obs_info["dt"][series_idx],
+                    obs_time_series = np.linspace(0, self.obs_info["ground_truth_series"][series_idx].shape[0]*self.obs_info["obs_dt"][series_idx],
                                                     self.obs_info["ground_truth_series"][series_idx].shape[0])
 
                     series_entry = np.interp(obs_time_series, time_series, series[series_idx])

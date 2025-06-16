@@ -46,6 +46,7 @@
         <variable name="R_lt" public_interface="in" units="Js_per_m6"/>
         <variable name="R_tb" public_interface="in" units="Js_per_m6"/>
         <variable name="R_bA" public_interface="in" units="Js_per_m6"/>
+        <variable name="R_scale" public_interface="in" units="dimensionless"/>
         <variable name="R_plwall" public_interface="in" units="Js_per_m6"/>
         <!-- ______  Compliances_________-->
         <variable name="C_l" public_interface="in" units="m6_per_J"/>
@@ -56,7 +57,7 @@
         <!-- periods/times-->
         <variable name="t_floor" public_interface="out" units="second"/>
         <variable name="T_resp" public_interface="in" units="second"/>
-        <variable name="Delta_RR_resp" public_interface="in" units="second"/>
+        <variable name="Delta_RR_resp" public_interface="in" units="per_s"/>
         <variable name="T_resp_wCont" public_interface="out" units="second"/>
         <variable name="T_resp_min" public_interface="in" units="second"/>
         <variable name="T_I" public_interface="out" units="second"/>
@@ -94,12 +95,14 @@
                     </apply>
                 </apply>
             </apply>
+            <!-- We keep T_E and T_I based on T_resp, not T_resp control, then move through t_floor faster or slower
+ as calculated below.-->
             <apply>
                 <eq/>
                 <ci>T_E</ci>
                 <apply>
                     <divide/>
-                    <ci>T_resp_wCont</ci>
+                    <ci>T_resp</ci>
                     <apply>
                         <plus/>
                         <cn cellml:units="dimensionless">1</cn>
@@ -136,7 +139,11 @@
                         <ci>P_m</ci>
                         <ci>P_l</ci>
                     </apply>
-                    <ci>R_ml</ci>
+                    <apply>
+                        <times/>
+                        <ci>R_ml</ci>
+                        <ci>R_scale</ci>
+                    </apply>
                 </apply>
             </apply>
             <apply>
@@ -173,7 +180,11 @@
                         <ci>P_l</ci>
                         <ci>P_t</ci>
                     </apply>
-                    <ci>R_lt</ci>
+                    <apply>
+                        <times/>
+                        <ci>R_lt</ci>
+                        <ci>R_scale</ci>
+                    </apply>
                 </apply>
             </apply>
             <apply>
@@ -219,7 +230,11 @@
                         <ci>P_t</ci>
                         <ci>P_b</ci>
                     </apply>
-                    <ci>R_tb</ci>
+                    <apply>
+                        <times/>
+                        <ci>R_tb</ci>
+                        <ci>R_scale</ci>
+                    </apply>
                 </apply>
             </apply>
             <apply>
@@ -265,7 +280,11 @@
                         <ci>P_b</ci>
                         <ci>P_A</ci>
                     </apply>
-                    <ci>R_bA</ci>
+                    <apply>
+                        <times/>
+                        <ci>R_bA</ci>
+                        <ci>R_scale</ci>
+                    </apply>
                 </apply>
             </apply>
             <!-- v_Awall = v_bA-->
@@ -320,13 +339,9 @@
                 <eq/>
                 <ci>P_pl</ci>
                 <apply>
-                    <minus/>
-                    <apply>
-                        <divide/>
-                        <ci>q_pl</ci>
-                        <ci>C_pl</ci>
-                    </apply>
-                    <ci>P_plEE</ci>
+                    <divide/>
+                    <ci>q_pl</ci>
+                    <ci>C_pl</ci>
                 </apply>
             </apply>
             <apply>
@@ -365,26 +380,47 @@
                     <ci>q_A_us</ci>
                 </apply>
             </apply>
-            <!-- TODO + unstressed volume-->
-            <!-- calculate time through this period-->
+        </math>
+        <!-- TODO + unstressed volume-->
+        <variable initial_value="0.0" name="s" public_interface="out" units="dimensionless"/>
+        <variable name="mt" public_interface="out" units="dimensionless"/>
+        <!-- calculate normalised time through this period-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>s</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <ci>T_resp_wCont</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mt</ci>
+                <apply>
+                    <minus/>
+                    <ci>s</ci>
+                    <apply>
+                        <floor/>
+                        <ci>s</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <!-- unnormalise (t_floor goes from 0 to T_resp, not T_resp_wCont) -->
             <apply>
                 <eq/>
                 <ci>t_floor</ci>
                 <apply>
-                    <minus/>
-                    <ci>t</ci>
-                    <apply>
-                        <times/>
-                        <apply>
-                            <floor/>
-                            <apply>
-                                <divide/>
-                                <ci>t</ci>
-                                <ci>T_resp_wCont</ci>
-                            </apply>
-                        </apply>
-                        <ci>T_resp_wCont</ci>
-                    </apply>
+                    <times/>
+                    <ci>mt</ci>
+                    <ci>T_resp</ci>
                 </apply>
             </apply>
             <!-- TODO swap this muscle model for the one used in ben tal and smith 2008-->
@@ -401,6 +437,23 @@
                     </apply>
                 </apply>
             </apply>
+        </math>
+        <!-- This is the controlled end expiratiory pressure-->
+        <variable name="P_mus_max_wCont" public_interface="out" units="J_per_m3"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>P_mus_max_wCont</ci>
+                <apply>
+                    <minus/>
+                    <ci>P_plEE</ci>
+                    <apply>
+                        <times/>
+                        <ci>flag_P_mus_control</ci>
+                        <ci>Delta_P_mus</ci>
+                    </apply>
+                </apply>
+            </apply>
             <apply>
                 <eq/>
                 <ci>P_mus</ci>
@@ -409,23 +462,28 @@
                         <apply>
                             <plus/>
                             <apply>
-                                <times/>
+                                <minus/>
+                                <ci>P_mus_max_wCont</ci>
                                 <apply>
-                                    <divide/>
+                                    <times/>
                                     <apply>
-                                        <minus/>
-                                        <ci>P_mus_min_wCont</ci>
+                                        <divide/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>P_mus_min_wCont</ci>
+                                            <ci>P_mus_max_wCont</ci>
+                                        </apply>
+                                        <apply>
+                                            <times/>
+                                            <ci>T_I</ci>
+                                            <ci>T_E</ci>
+                                        </apply>
                                     </apply>
                                     <apply>
-                                        <times/>
-                                        <ci>T_I</ci>
-                                        <ci>T_E</ci>
+                                        <power/>
+                                        <ci>t_floor</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
                                     </apply>
-                                </apply>
-                                <apply>
-                                    <power/>
-                                    <ci>t_floor</ci>
-                                    <cn cellml:units="dimensionless">2</cn>
                                 </apply>
                             </apply>
                             <apply>
@@ -434,8 +492,12 @@
                                     <divide/>
                                     <apply>
                                         <times/>
-                                        <ci>P_mus_min_wCont</ci>
-                                        <ci>T_resp_wCont</ci>
+                                        <apply>
+                                            <minus/>
+                                            <ci>P_mus_min_wCont</ci>
+                                            <ci>P_mus_max_wCont</ci>
+                                        </apply>
+                                        <ci>T_resp</ci>
                                     </apply>
                                     <apply>
                                         <times/>
@@ -454,13 +516,50 @@
                     </piece>
                     <otherwise>
                         <apply>
-                            <times/>
+                            <plus/>
+                            <ci>P_mus_max_wCont</ci>
                             <apply>
-                                <divide/>
-                                <ci>P_mus_min_wCont</ci>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <minus/>
+                                        <ci>P_mus_min_wCont</ci>
+                                        <ci>P_mus_max_wCont</ci>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <cn cellml:units="dimensionless">1</cn>
+                                        <apply>
+                                            <exp/>
+                                            <apply>
+                                                <divide/>
+                                                <apply>
+                                                    <minus/>
+                                                    <ci>T_E</ci>
+                                                </apply>
+                                                <ci>tau</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                </apply>
                                 <apply>
                                     <minus/>
-                                    <cn cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <apply>
+                                                <minus/>
+                                                <apply>
+                                                    <minus/>
+                                                    <ci>t_floor</ci>
+                                                    <ci>T_I</ci>
+                                                </apply>
+                                            </apply>
+                                            <ci>tau</ci>
+                                        </apply>
+                                    </apply>
                                     <apply>
                                         <exp/>
                                         <apply>
@@ -471,35 +570,6 @@
                                             </apply>
                                             <ci>tau</ci>
                                         </apply>
-                                    </apply>
-                                </apply>
-                            </apply>
-                            <apply>
-                                <minus/>
-                                <apply>
-                                    <exp/>
-                                    <apply>
-                                        <divide/>
-                                        <apply>
-                                            <minus/>
-                                            <apply>
-                                                <minus/>
-                                                <ci>t_floor</ci>
-                                                <ci>T_I</ci>
-                                            </apply>
-                                        </apply>
-                                        <ci>tau</ci>
-                                    </apply>
-                                </apply>
-                                <apply>
-                                    <exp/>
-                                    <apply>
-                                        <divide/>
-                                        <apply>
-                                            <minus/>
-                                            <ci>T_E</ci>
-                                        </apply>
-                                        <ci>tau</ci>
                                     </apply>
                                 </apply>
                             </apply>

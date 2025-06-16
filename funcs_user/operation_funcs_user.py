@@ -97,7 +97,7 @@ def calc_spike_period(t, V, series_output=False):
     return period
 
 @series_to_constant
-def calc_spike_frequency_windowed(t, V, series_output=False, spike_min_thresh=-10):
+def calc_spike_frequency_windowed(t, V, series_output=False, spike_min_thresh=-10, start_frac=0.0, end_frac=1.0):
     """
     this calculates the number of spikes per 
     second in the given window. Not an accurate actual 
@@ -107,10 +107,13 @@ def calc_spike_frequency_windowed(t, V, series_output=False, spike_min_thresh=-1
     """
     if series_output:
         return V
-    peak_idxs, peak_properties = find_peaks(V, height=spike_min_thresh)
+    # get the start and end of the window
+    start_idx = int(start_frac*(len(t)-1))
+    end_idx = int(end_frac*(len(t)-1))
+    peak_idxs, peak_properties = find_peaks(V[start_idx:end_idx], height=spike_min_thresh)
 
     # TODO maybe check peak properties here
-    spikes_per_s = len(peak_idxs)/(t[-1] - t[0])
+    spikes_per_s = len(peak_idxs)/(t[end_idx] - t[start_idx])
     return spikes_per_s
 
 @series_to_constant
@@ -202,9 +205,13 @@ def first_period(t, V, series_output=False, spike_min_thresh=None, distance=None
     # set distance = 5 to make sure it doesn't count a peak as two
     peak_idxs, peak_properties = find_peaks(V, height=spike_min_thresh, distance=distance)
     # TODO maybe check peak properties here
-    if len(peak_idxs) < 2:
+    if len(peak_idxs) < 1:
         # there aren't enough peaks to calculate a period
         # so set the period_diff to the max time of the simulation
+        first_period = t[-1] - t[0]
+    elif len(peak_idxs) < 2:
+        # there aren't enough peaks to calculate a first period
+        # so set the period_diff to the time to the first peak
         first_period = t[-1] - t[0]
     else:
         # calculate peaks without a threshold after first peak
@@ -286,78 +293,112 @@ def peak_times(t, V, series_output=False):
     return peaks
 
 @series_to_constant
-def mean_last_half(x, series_output=False):
+def mean_in_range(x, start_frac=0.0, end_frac=1.0, series_output=False):
     if series_output:
         return x
     else:
-        half_len = len(x) // 2
-        last_half_values = x[half_len:]
-        return np.mean(last_half_values)
+        start_idx = int(start_frac*(len(t)-1))
+        end_idx = int(end_frac*(len(t)-1))
+        range_values = x[start_frac:end_frac]
+        return np.mean(range_values)
 
 @series_to_constant
-def mean_last_quarter(x, series_output=False):
+def max_in_range(x, series_output=False):
     if series_output:
         return x
     else:
-        quarter_len = len(x) // 4
-        last_quarter_values = x[-quarter_len:]
-        return np.mean(last_quarter_values)
+        start_idx = int(start_frac*(len(t)-1))
+        end_idx = int(end_frac*(len(t)-1))
+        range_values = x[start_frac:end_frac]
+        return np.max(range_values)
+
 
 @series_to_constant
-def max_first_half(x, series_output=False):
+def min_in_range(x, series_output=False):
     if series_output:
         return x
     else:
-        half_len = len(x) // 2
-        first_half_values = x[:half_len]
-        return np.max(first_half_values)
+        start_idx = int(start_frac*(len(t)-1))
+        end_idx = int(end_frac*(len(t)-1))
+        range_values = x[start_frac:end_frac]
+        return np.min(range_values)
 
 @series_to_constant
-def max_first_quarter(x, series_output=False):
+def mean_AP_threshold(t, V, series_output=False, spike_min_thresh=None, distance=None, dV_dt_thresh=10e3):
+    """
+    This function calculates the mean action potential threshold
+    using the peak detection algorithm from scipy.
+    It finds the peaks in the voltage signal and then 
+    moves back to pre AP (approximately) It then moves foreward until
+    dV/dt is greater than dV_dt_thresh, default is 10 mV/ms (10e3 mV/s) from platkiewicz2010Threshold.
+
+    # TODO this won't work with noise
+    """
+            
     if series_output:
-        return x
+        return V
+    # set distance = 5 to make sure it doesn't count a peak as two
+    peak_idxs, peak_properties = find_peaks(V, height=spike_min_thresh, distance=distance)
+    # TODO maybe check peak properties here
+    if len(peak_idxs) < 1:
+        # there are no peaks, so set value to mean of the voltage
+        threshold = np.mean(V)
     else:
-        quarter_len = len(x) // 4
-        first_quarter_values = x[:quarter_len]
-        return np.max(first_quarter_values)
+        prev_idx = 0
+        thresholds = []
+        for peak_idx in peak_idxs:
+            t_peak = t[peak_idx]
+            current_idx = int((peak_idx + prev_idx) *3/ 4)
+            dV_dt = 0
+            dV_dt_prev = 0
+            while dV_dt < dV_dt_thresh and current_idx < len(t) - 1:
+                dV_dt_prev = dV_dt
+                dV_dt = (V[current_idx + 1] - V[current_idx]) / (t[current_idx + 1] - t[current_idx])
+                current_idx += 1
+            if current_idx < len(t) - 1:
+                interp_thresh = np.interp(dV_dt_thresh, [dV_dt_prev, dV_dt], [V[current_idx-1], V[current_idx]])
+                thresholds.append(interp_thresh) 
+                prev_idx = peak_idx
+            else:
+                # threshold not found for this peak, ignore it.
+                pass
+            
+        if len(thresholds) == 0:
+            # no thresholds found, exit
+            print("no thresholds found, setting cost to large")
+            threshold = 9999
+        else:
+            threshold = np.mean(thresholds)
+
+    return threshold
 
 @series_to_constant
-def max_second_quarter(x, series_output=False):
+def mean_peak_to_trough_time(t, V, series_output=False, spike_min_thresh=None, distance=None):
+    """
+    This function calculates the time between the peak and trough of each action potential
+    then takes the mean of them all
+    """
+            
     if series_output:
-        return x
+        return V
+    # set distance = 5 to make sure it doesn't count a peak as two
+    peak_idxs, peak_properties = find_peaks(V, height=spike_min_thresh, distance=distance)
+    # TODO maybe check peak properties here
+    if len(peak_idxs) < 1:
+        # there are no peaks, so set value to zero
+        t_diff = 0
     else:
-        quarter_len = len(x) // 4
-        second_quarter_values = x[quarter_len:2 * quarter_len]
-        return np.max(second_quarter_values)
+        t_diff_times = []
+        for II in range(len(peak_idxs)):
+            t_peak = t[peak_idxs[II]]
 
-@series_to_constant
-def max_last_quarter(x, series_output=False):
-    if series_output:
-        return x
-    else:
-        quarter_len = len(x) // 4
-        last_quarter_values = x[-quarter_len:]
-        return np.max(last_quarter_values)
+            next_peak_idx = peak_idxs[II + 1] if II + 1 < len(peak_idxs) else len(t) - 1
+            trough_idx = np.argmin(V[peak_idxs[II]:next_peak_idx]) + peak_idxs[II]
+            t_diff_times.append(t[trough_idx] - t_peak)
+            
+        t_diff = np.mean(t_diff_times)
 
-@series_to_constant
-def min_first_half(x, series_output=False):
-    if series_output:
-        return x
-    else:
-        half_len = len(x) // 2
-        first_half_values = x[:half_len]
-        return np.min(first_half_values)
-
-@series_to_constant
-def min_first_quarter(x, series_output=False):
-    if series_output:
-        return x
-    else:
-        quarter_len = len(x) // 4
-        first_quarter_values = x[:quarter_len]
-        return np.min(first_quarter_values)
-
-
+    return t_diff
 
 
 

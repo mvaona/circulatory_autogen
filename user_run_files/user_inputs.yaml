@@ -8,14 +8,25 @@ file_prefix: rat1
 # parameters file will be generated with spaces for the required parameters
 input_param_file: rat1_parameters.csv
 
+# input_param_file: vital_stage1adan_merged_wSinks_OL_simStep_C0_parameters.csv
+# input_param_file: vital_stage1adan_merged_wSinks_OL_simStepSS_C0_parameters.csv
+# input_param_file: vital_stage1adan_merged_wSinks_OL_calibStep_C0_parameters.csv # Calibration0
+# input_param_file: vital_stage1adan_merged_wSinks_OL_calibStep_C0_MODconn_parameters.csv # Calibration0
+# input_param_file: vital_stage1adan_merged_wSinks_OL_calibStep_C1_parameters.csv # Calibration1
+# input_param_file: vital_stage1adan_merged_wSinks_OL_calibStep_C2_parameters.csv # Calibration2
+# input_param_file: vital_stage1adan_merged_wSinks_OL_calibStep_C2_MOD_parameters.csv # Calibration2
+# input_param_file: vital_stage1adan_merged_wSinks_OL_simStepWcalib_C0_parameters.csv # Calibration0
+# input_param_file: vital_stage1adan_merged_wSinks_OL_simStepWcalib_C1_parameters.csv # Calibration1
+# input_param_file: vital_stage1adan_merged_wSinks_OL_simStepWcalib_C2_parameters.csv # Calibration2
+
 # cpp generation inputs
 # solver options are: RK4, forward_euler, CVODE
 # TODO make this also change the solver in the opencor sims when not generating cpp.
 # solver: RK4
 solver: CVODE
 # model_type can be cellml_only or cpp atm 
-# model_type: cpp
-model_type: cellml_only
+model_type: cpp
+# model_type: cellml_only
 
 #__________ parameter identification inputs __________
 # param_id_method can be any of [genetic_algorithm]
@@ -38,7 +49,8 @@ sim_time: 2
 # param_id_output_dir: /home/farg967/Documents/git_projects/CA_user/3compartment/param_id_output
 
 # This is for cpp generation
-cpp_generated_models_dir: /home/farg967/software/venous_system/lucas_model/fvm
+# cpp_generated_models_dir: /home/farg967/software/venous_system/lucas_model/fvm
+cpp_generated_models_dir: /home/farg967/Documents/git_projects/circulatory_autogen/generated_models/3compartment/
 # This is for cpp_coupling
 couple_to_1d: false
 cpp_1d_model_config_path: 
@@ -54,6 +66,7 @@ solver_info:
 
 # This for 3compartment
 param_id_obs_path: /home/farg967/Documents/git_projects/circulatory_autogen/resources/3compartment_obs_data.json
+# param_id_obs_path: /hpc/bghi639/Software/circulatory_autogen/resources/simple_physiological_nonlinear_visco_obs_data.json
 
 #_______ sensitivity analysis inputs __________
 do_sensitivity: false
